@@ -1,5 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider IsDarkMode="true" />
+<MudPopoverProvider @rendermode="InteractiveServer" />
+<MudDialogProvider @rendermode="InteractiveServer" />
+<MudSnackbarProvider @rendermode="InteractiveServer" />
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
