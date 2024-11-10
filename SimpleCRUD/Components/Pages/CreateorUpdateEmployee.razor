@@ -13,6 +13,7 @@
 					<MudTextField 
 						Variant="Variant.Outlined" 
 						ShrinkLabel 
+						Label="Full Name"
 						@bind-Value="model.FullName" 
 						For="@(() => model.FullName)" />
 				</MudItem>
@@ -20,6 +21,7 @@
 					<MudTextField 
 						Variant="Variant.Outlined"
 						ShrinkLabel
+						Label="Age"
 						@bind-Value="model.Age"
 						For="@(() => model.Age)" />
 				</MudItem>
@@ -30,12 +32,14 @@
 			<MudTextField Class="mb-5"
 				Variant="Variant.Outlined"
 				ShrinkLabel
+				Label="Department"
 				@bind-Value="model.Department"
 				For="@(() => model.Department)" />
 
 			<MudTextField 
 				Variant="Variant.Outlined"
 				ShrinkLabel
+				Label="Phone Number"
 				@bind-Value="model.PhoneNumber"
 				For="@(() => model.PhoneNumber)" />
 		</DialogContent>
