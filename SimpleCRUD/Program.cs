@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 using SimpleCRUD.Components;
 using SimpleCRUD.DataAccess;
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<AppDBContext>(option =>
 
 builder.Services.AddMudServices();
 builder.Services.AddScoped<EmployeeService>();
+//builder.Services.AddScoped<DialogService>();    
 
 var app = builder.Build();
 

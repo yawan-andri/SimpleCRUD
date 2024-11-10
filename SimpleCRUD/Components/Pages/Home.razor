@@ -7,7 +7,7 @@
 @using SimpleCRUD.ViewModels
 
 @inject EmployeeService EmployeeService
-@inject DialogService DialogService
+@inject IDialogService DialogService
 
 @rendermode InteractiveServer
 
@@ -25,7 +25,6 @@
             Color="Color.Primary">
             Add New Employee
         </MudButton>
-
 
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
