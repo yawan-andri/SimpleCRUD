@@ -37,6 +37,26 @@
         <PropertyColumn Property="x => x.DateOfBirth" Format="dd MMM yyyy" Title="Date of Birth" />
         <PropertyColumn Property="x => x.Age" />
         <PropertyColumn Property="x => x.PhoneNumber" />
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudButton Class="me-2"
+                        Size="@Size.Small"
+                        Variant="Variant.Filled"
+                        StartIcon="@Icons.Material.Filled.Edit"
+                        Color="@Color.Warning"
+                        OnClick="@(() => this.UpdateEmployee(context))">
+                        Update
+                    </MudButton>
+                <MudButton Size="@Size.Small"
+                           Variant="Variant.Filled"
+                           StartIcon="@Icons.Material.Filled.Delete"
+                           Color="@Color.Warning"
+                           OnClick="@(() => this.RemoveEmployee(context))">
+                           Delete
+                </MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+
     </Columns>
     <PagerContent>
         <MudDataGridPager T="EmployeeViewModel" />
@@ -130,6 +150,16 @@
 
         if (result is not null && !result.Canceled)
             await dataGrid.ReloadServerData();
+
+    }
+
+    private async Task UpdateEmployee(CellContext<EmployeeViewModel> employee)
+    {
+        
+    }
+ 
+    private async Task RemoveEmployee(CellContext<EmployeeViewModel> employee)
+    {
 
     }
 }

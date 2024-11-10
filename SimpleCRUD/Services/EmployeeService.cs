@@ -53,5 +53,62 @@ namespace SimpleCRUD.Services
                 return false;
             }
         }
+
+        public EmployeeViewModel? FindEmployee(int employeeID)
+        {
+            var employee = dBContext.Employees.Find(employeeID);
+            if (employee == null) return null;
+
+            EmployeeViewModel result = new EmployeeViewModel
+            {
+                EmployeeId = employee.EmployeeId,
+                FullName = employee.FullName,
+                DateOfBirth = employee.DateOfBirth,
+                Department = employee.Department,
+                Age = employee.Age,
+                PhoneNumber = employee.PhoneNumber,
+            };
+            return result;
+        }
+
+        public bool UpdateEmployee(EmployeeViewModel model)
+        {
+            try
+            {
+                var employee = dBContext.Employees.Find(model.EmployeeId);
+                if (employee == null) return false;
+
+
+                employee.FullName = model.FullName;
+                employee.Department = model.Department;
+                employee.Age = model.Age;
+                employee.PhoneNumber = model.PhoneNumber;
+                employee.DateOfBirth = model.DateOfBirth;
+
+                var result = dBContext.SaveChanges();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteEmployee(int employeeID)
+        {
+            try
+            {
+                var employee = dBContext.Employees.Find(employeeID);
+                if (employee == null) return false;
+
+                dBContext.Employees.Remove(employee);
+                var result = dBContext.SaveChanges();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
