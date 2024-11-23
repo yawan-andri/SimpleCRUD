@@ -1,5 +1,6 @@
 ﻿@using SimpleCRUD.Services
 @using SimpleCRUD.ViewModels
+@using SimpleCRUD.Enum
 
 @inject EmployeeService EmployeeService 
 @inject ISnackbar Snackbar
@@ -51,12 +52,17 @@
 </EditForm>
 
 @code {
-	[CascadingParameter]
-	private MudDialogInstance MudDialog { get; set; }
+	[Parameter]
+	public UIActionEnum Action { get; set; } = UIActionEnum.Insert;
 
+	[Parameter]
 	public DateTime? _date { get; set; } = DateTime.Today;
 
+	[Parameter]
 	public EmployeeViewModel model { get; set; } = new EmployeeViewModel();
+
+	[CascadingParameter]
+	private MudDialogInstance MudDialog { get; set; }
 
 	private async Task OnValidSubmit(EditContext editcontext)
 	{
