@@ -3,11 +3,14 @@
 <PageTitle>Home</PageTitle>
 
 @using System.Threading
+@using SimpleCRUD.Enum
 @using SimpleCRUD.Services
 @using SimpleCRUD.ViewModels
 
+
 @inject EmployeeService EmployeeService
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 @rendermode InteractiveServer
 
@@ -47,13 +50,13 @@
                         OnClick="@(() => this.UpdateEmployee(context))">
                         Update
                     </MudButton>
-                <MudButton Size="@Size.Small"
-                           Variant="Variant.Filled"
-                           StartIcon="@Icons.Material.Filled.Delete"
-                           Color="@Color.Warning"
-                           OnClick="@(() => this.RemoveEmployee(context))">
-                           Delete
-                </MudButton>
+                    <MudButton Size="@Size.Small"
+                                Variant="Variant.Filled"
+                                StartIcon="@Icons.Material.Filled.Delete"
+                                Color="@Color.Error"
+                                OnClick="@(() => this.RemoveEmployee(context))">
+                                Delete
+                    </MudButton>
                 </CellTemplate>
             </TemplateColumn>
 
@@ -145,7 +148,13 @@
     {
         var options = new DialogOptions { MaxWidth = MaxWidth.Large };
 
-        var dialog = await DialogService.ShowAsync<CreateorUpdateEmployee>("Add Employee", options);
+        var parameters = new DialogParameters<CreateorUpdateEmployee>
+        {
+            { x => x.Action, UIActionEnum.Insert },
+            { x => x.model, new EmployeeViewModel() }
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateorUpdateEmployee>("Add Employee", parameters, options);
         var result = await dialog.Result;
 
         if (result is not null && !result.Canceled)
@@ -155,11 +164,50 @@
 
     private async Task UpdateEmployee(CellContext<EmployeeViewModel> employee)
     {
-        
+        var employeeView = EmployeeService.FindEmployee(employee.Item.EmployeeId);
+        if (employeeView is null)
+        {
+            Snackbar.Add("Something wrong when trying to find the employee!", Severity.Error);
+            return;
+        }
+
+
+        var options = new DialogOptions { MaxWidth = MaxWidth.Large };
+
+        var parameters = new DialogParameters<CreateorUpdateEmployee>
+        {
+            { x => x.Action, UIActionEnum.Update },
+            { x => x.model, employeeView },
+            { x => x._date, employeeView.DateOfBirth }
+        };
+
+        var dialog = await DialogService.ShowAsync<CreateorUpdateEmployee>("Update Employee", parameters, options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled)
+            await dataGrid.ReloadServerData();
     }
- 
+
     private async Task RemoveEmployee(CellContext<EmployeeViewModel> employee)
     {
+        var dialog = await DialogService.ShowAsync<RemoveConfirmationDialog>("Remove: " + employee.Item.FullName);
+        var result = await dialog.Result;
 
+        if(result is not null && !result.Canceled)
+        {
+            var confirmed = (bool)(result.Data ?? false);
+            if (confirmed)
+            {
+                var deleteResult = EmployeeService.DeleteEmployee(employee.Item.EmployeeId);
+                if (deleteResult)
+                {
+                    Snackbar.Add("Successfully remove the employee!", Severity.Success);
+                    await dataGrid.ReloadServerData();
+                } else
+                {
+                    Snackbar.Add("Failed remove the employee!", Severity.Error);
+                }
+            }
+        }
     }
 }

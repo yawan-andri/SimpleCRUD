@@ -70,14 +70,41 @@
 		{
 			model.DateOfBirth = _date.Value;
 		}
+
+		if(Action == UIActionEnum.Insert)
+		{
+			CreateEmpolyee();
+		} else if (Action == UIActionEnum.Update)
+		{
+			UpdateEmployee();
+		}
+	}
+
+	private void CreateEmpolyee()
+	{
 		var result = EmployeeService.CreateNewEmployee(model);
 		if (result)
 		{
 			Snackbar.Add("Succesfully create the employee", Severity.Success);
 			MudDialog.Close();
-		} else
+		}
+		else
 		{
 			Snackbar.Add("Failed create the employee", Severity.Error);
+		}
+	}
+
+	private void UpdateEmployee()
+	{
+		var result = EmployeeService.UpdateEmployee(model);
+		if (result)
+		{
+			Snackbar.Add("Succesfully update the employee", Severity.Success);
+			MudDialog.Close();
+		}
+		else
+		{
+			Snackbar.Add("Failed update the employee", Severity.Error);
 		}
 	}
 
